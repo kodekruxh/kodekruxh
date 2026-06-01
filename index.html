@@ -2028,17 +2028,22 @@
         
         <script>
           window.addEventListener('message', function(event) {
+            // 1. If the message isn't a string, ignore it completely (this ignores Google's internal junk)
+            if (typeof event.data !== 'string') return;
+        
             const iframe = document.getElementById('help-desk-iframe');
+            if (!iframe) return;
             
-            // If the widget says "I am open", expand the iframe to fit the chat window
-            if (event.data === 'chatOpened') {
+            // 2. Check for our specific string flags and resize
+            if (event.data === 'HELPDESK_OPEN') {
               iframe.style.width = '400px';
               iframe.style.height = '600px';
+              console.log("Chat opened - resizing to 400x600"); // Let's log it to be sure!
             } 
-            // If the widget says "I am closed", shrink the iframe back down to the button size
-            else if (event.data === 'chatClosed') {
+            else if (event.data === 'HELPDESK_CLOSE') {
               iframe.style.width = '90px';
               iframe.style.height = '90px';
+              console.log("Chat closed - shrinking to 90x90");
             }
           });
         </script>
